@@ -5,7 +5,7 @@
 
 URL="http://localhost:8090"
 ENDPOINT="v1/example/echo"
-NUM_ARGS=0
+NUM_ARGS=1
 FILE_COOKIE=".cookie"
 OPTS=""
 
@@ -16,7 +16,7 @@ Usage () {
 	echo "Description:"
 	echo "Script file to use curl command to test the grpc gateway."
 	echo
-	echo "Usage: $SCRIPT_NAME"
+	echo "Usage: $SCRIPT_NAME [name]"
 	echo "Options:"
 	echo " -k                           Allow https insecure connection"
 	echo " -u  [url]                    IMS Customer Portal URL"
@@ -51,6 +51,7 @@ fi
 
 # trim URL trailing "/"
 URL="$(echo -e "${URL}" | sed -e 's/\/*$//')"
+NAME=$1
 
 # list all users' info
-curl $OPTS -vd '{"name": " hello"}' -H 'Accept: application/json' ${URL}/${ENDPOINT}
+curl $OPTS -vd "{\"name\": \"${NAME}\"}" -H 'Accept: application/json' ${URL}/${ENDPOINT}
