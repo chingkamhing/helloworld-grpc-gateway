@@ -14,14 +14,10 @@ all: proto build
 
 .PHONY: install
 install:
-	# [20210131] somehow, fail to install the following protoc-gen-grpc-gateway v2; so, install latest protoc-gen-grpc-gateway instead
-	go get github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
-	# go get github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
-	go get google.golang.org/protobuf/cmd/protoc-gen-go
-	go get google.golang.org/grpc/cmd/protoc-gen-go-grpc
+	./script/install-libraries.sh
 
 .PHONY: clean
 clean:
-	rm -rf proto/helloworld
-	rm -rf proto/api
+	rm -rf proto/helloworld/*
+	rm -rf proto/api/*
 	rm -f helloworld
