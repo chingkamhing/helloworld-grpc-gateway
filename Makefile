@@ -19,6 +19,7 @@ install:
 
 .PHONY: clean
 clean:
-	rm -rf proto/helloworld/*
 	rm -rf proto/api/*
+	rm -rf proto/helloworld/*
+	rm -f api
 	rm -f helloworld
