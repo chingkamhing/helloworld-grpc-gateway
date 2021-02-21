@@ -4,7 +4,7 @@
 #
 
 URL="http://localhost:8090"
-ENDPOINT="v1/example/echo"
+ENDPOINT="v1/helloworld"
 NUM_ARGS=1
 FILE_COOKIE=".cookie"
 OPTS=""
