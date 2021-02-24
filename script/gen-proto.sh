@@ -34,9 +34,7 @@ GenerateProto () {
 	echo "Generating proto files for service \"$service\""
 	[ -d $output_dir ] || mkdir -p $output_dir
 	if [ "$service" == "$GATEWAY" ]; then
-		option_gateway="--grpc-gateway_out ${output_dir} --grpc-gateway_opt paths=source_relative --swagger_out ${output_dir}"
-	else
-		option_gateway=""
+		local option_gateway="--grpc-gateway_out ${output_dir} --grpc-gateway_opt paths=source_relative --swagger_out ${output_dir}"
 	fi
 	protoc -I ${src_dir} -I ${GOPATH}/src/github.com/googleapis/googleapis \
 		--go_out ${output_dir} --go_opt paths=source_relative \
