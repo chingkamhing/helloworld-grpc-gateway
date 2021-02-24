@@ -8,7 +8,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
-	apipb "helloworld-grpc-gateway/proto/api"
+	apipb "helloworld-grpc-gateway/proto-lib/api"
 )
 
 func main() {

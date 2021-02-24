@@ -3,6 +3,11 @@
 # Script to protoc generate all proto source files.
 #
 
+PROTO_DIR="proto"
+OUTPUT_DIR="proto-lib"
+GATEWAY="api"
+SERVICES=( $GATEWAY "helloworld" )
+
 # either 0 argument
 NUM_ARGS=0
 
@@ -17,6 +22,27 @@ Usage () {
 	echo "Options:"
 	echo " -h                           This help message"
 	echo
+}
+
+# Generate proto files
+GenerateProto () {
+	local src_root_dir=$1
+	local service=$2
+	local output_root_dir=$3
+	local src_dir="${src_root_dir}/${service}"
+	local output_dir="${output_root_dir}/${service}"
+	echo "Generating proto files for service \"$service\""
+	[ -d $output_dir ] || mkdir -p $output_dir
+	if [ "$service" == "$GATEWAY" ]; then
+		option_gateway="--grpc-gateway_out ${output_dir} --grpc-gateway_opt paths=source_relative --swagger_out ${output_dir}"
+	else
+		option_gateway=""
+	fi
+	protoc -I ${src_dir} -I ${GOPATH}/src/github.com/googleapis/googleapis \
+		--go_out ${output_dir} --go_opt paths=source_relative \
+		--go-grpc_out ${output_dir} --go-grpc_opt paths=source_relative \
+		${option_gateway} \
+		${src_dir}/${service}.proto
 }
 
 # Parse input argument(s)
@@ -37,8 +63,7 @@ if [ "$#" -ne "$NUM_ARGS" ]; then
 	exit 1
 fi
 
-# generate api grpc-gateway server
-protoc -I ./proto -I ${GOPATH}/src/github.com/googleapis/googleapis --go_out ./proto/api --go_opt paths=source_relative --go-grpc_out ./proto/api --go-grpc_opt paths=source_relative --swagger_out ./proto/api ./proto/api.proto
-protoc -I ./proto -I ${GOPATH}/src/github.com/googleapis/googleapis --go_out ./proto/api --go_opt paths=source_relative --go-grpc_out ./proto/api --go-grpc_opt paths=source_relative --grpc-gateway_out ./proto/api --grpc-gateway_opt paths=source_relative ./proto/api.proto
-# generate helloworld grpc server
-protoc -I ./proto --go_out ./proto/helloworld --go_opt paths=source_relative --go-grpc_out ./proto/helloworld --go-grpc_opt paths=source_relative ./proto/helloworld.proto
+# generate services proto files
+for service in "${SERVICES[@]}"; do
+	GenerateProto $PROTO_DIR $service $OUTPUT_DIR
+done
